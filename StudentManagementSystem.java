@@ -4,8 +4,8 @@ import java.util.Scanner;
 public class StudentManagementSystem {
 
     static final String DB_URL = "jdbc:oracle:thin:@localhost:1521:xe"; // Change if needed
-    static final String DB_USER = "your_username"; // Your Oracle username
-    static final String DB_PASS = "your_password"; // Your Oracle password
+    static final String DB_USER = "system"; // Your Oracle username
+    static final String DB_PASS = "jhansi"; // Your Oracle password
 
     public static void main(String[] args) {
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
@@ -195,3 +195,4 @@ public class StudentManagementSystem {
         }
     }
 }
+

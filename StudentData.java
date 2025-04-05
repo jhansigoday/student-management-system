@@ -1,89 +1,42 @@
-import java.sql.*;
-
 public class StudentData {
-    Connection conn;
+    private int rollNo;
+    private String name;
+    private int age;
+    private String department;
+    private String branch;
+    private int numSubjects;
+    private double totalMarks;
 
-    public StudentData() {
-        try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            conn = DriverManager.getConnection(
-                "jdbc:oracle:thin:@localhost:1521:xe", "system", "jhansi");
-        } catch (Exception e) {
-            System.out.println("Connection failed: " + e.getMessage());
-        }
+    public StudentData(int rollNo, String name, int age, String department, String branch,
+                       int numSubjects, double totalMarks) {
+        this.rollNo = rollNo;
+        this.name = name;
+        this.age = age;
+        this.department = department;
+        this.branch = branch;
+        this.numSubjects = numSubjects;
+        this.totalMarks = totalMarks;
     }
 
-    public void addStudent(int rollNo, String name, int age) {
-        try {
-            PreparedStatement pst = conn.prepareStatement("INSERT INTO studentt VALUES (?, ?, ?, NULL)");
-            pst.setInt(1, rollNo);
-            pst.setString(2, name);
-            pst.setInt(3, age);
-            pst.executeUpdate();
-            System.out.println("Student added successfully.");
-        } catch (Exception e) {
-            System.out.println("Add failed: " + e.getMessage());
-        }
-    }
+    // Getters and setters
+    public int getRollNo() { return rollNo; }
+    public void setRollNo(int rollNo) { this.rollNo = rollNo; }
 
-    public void viewAllStudents() {
-        try {
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM studentt");
-            while (rs.next()) {
-                System.out.println("Roll No: " + rs.getInt(1) + ", Name: " + rs.getString(2) +
-                                   ", Age: " + rs.getInt(3) + ", GPA: " + rs.getFloat(4));
-            }
-        } catch (Exception e) {
-            System.out.println("View failed: " + e.getMessage());
-        }
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public void updateStudent(int rollNo, String name, int age) {
-        try {
-            PreparedStatement pst = conn.prepareStatement(
-                "UPDATE studentt SET name=?, age=? WHERE roll_no=?");
-            pst.setString(1, name);
-            pst.setInt(2, age);
-            pst.setInt(3, rollNo);
-            int rows = pst.executeUpdate();
-            if (rows > 0)
-                System.out.println("Student updated.");
-            else
-                System.out.println("Roll No not found.");
-        } catch (Exception e) {
-            System.out.println("Update failed: " + e.getMessage());
-        }
-    }
+    public int getAge() { return age; }
+    public void setAge(int age) { this.age = age; }
 
-    public void deleteStudent(int rollNo) {
-        try {
-            PreparedStatement pst = conn.prepareStatement("DELETE FROM studentt WHERE roll_no=?");
-            pst.setInt(1, rollNo);
-            int rows = pst.executeUpdate();
-            if (rows > 0)
-                System.out.println("Student deleted.");
-            else
-                System.out.println("Roll No not found.");
-        } catch (Exception e) {
-            System.out.println("Delete failed: " + e.getMessage());
-        }
-    }
+    public String getDepartment() { return department; }
+    public void setDepartment(String department) { this.department = department; }
 
-    public void calculateGPA(int rollNo, int[] marks) {
-        try {
-            int total = 0;
-            for (int mark : marks)
-                total += mark;
-            float gpa = (float) total / marks.length;
+    public String getBranch() { return branch; }
+    public void setBranch(String branch) { this.branch = branch; }
 
-            PreparedStatement pst = conn.prepareStatement("UPDATE studentt SET gpa=? WHERE roll_no=?");
-            pst.setFloat(1, gpa);
-            pst.setInt(2, rollNo);
-            pst.executeUpdate();
-            System.out.println("GPA calculated and updated: " + gpa);
-        } catch (Exception e) {
-            System.out.println("GPA update failed: " + e.getMessage());
-        }
-    }
+    public int getNumSubjects() { return numSubjects; }
+    public void setNumSubjects(int numSubjects) { this.numSubjects = numSubjects; }
+
+    public double getTotalMarks() { return totalMarks; }
+    public void setTotalMarks(double totalMarks) { this.totalMarks = totalMarks; }
 }

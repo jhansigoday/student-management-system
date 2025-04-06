@@ -21,12 +21,12 @@ public class StudentManagement {
                 case 1:
                     System.out.print("Enter Roll No: ");
                     int rollNo = sc.nextInt();
-                    sc.nextLine(); // Clear buffer
+                    sc.nextLine();
                     System.out.print("Enter Name: ");
                     String name = sc.nextLine();
                     System.out.print("Enter Age: ");
                     int age = sc.nextInt();
-                    sc.nextLine(); // Clear buffer
+                    sc.nextLine();
                     System.out.print("Enter Branch: ");
                     String branch = sc.nextLine();
                     sd.addStudent(rollNo, name, age, branch);
@@ -80,4 +80,5 @@ public class StudentManagement {
         }
     }
 }
+
 

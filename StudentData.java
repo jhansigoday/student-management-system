@@ -7,12 +7,12 @@ public class StudentData {
     public StudentData() {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-            conn = DriverManager.getConnection(
-                "jdbc:oracle:thin:@localhost:1521:xe", "system", "jhansi");
+            conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "jhansi");
             System.out.println("Database connection established.");
-            addGPAColumn();
+            addGPAColumn(); // Ensure GPA column exists
         } catch (Exception e) {
-            System.out.println("Connection failed: " + e.getMessage());
+            System.out.println("Connection failed!");
+            e.printStackTrace(); // Show full error
         }
     }
 
@@ -23,26 +23,24 @@ public class StudentData {
             if (!rs.next()) {
                 Statement stmt = conn.createStatement();
                 stmt.execute("ALTER TABLE student1 ADD gpa NUMBER(4,2)");
-                System.out.println("GPA column added to student1 table.");
+                System.out.println("GPA column added.");
             }
         } catch (Exception e) {
-            System.out.println("Failed to add GPA column: " + e.getMessage());
+            System.out.println("GPA column check failed: " + e.getMessage());
         }
     }
 
     public void addStudent(int rollNo, String name, int age, String branch) {
         try {
-            // Check for duplicate roll number
             PreparedStatement check = conn.prepareStatement("SELECT roll_no FROM student1 WHERE roll_no = ?");
             check.setInt(1, rollNo);
             ResultSet rs = check.executeQuery();
 
             if (rs.next()) {
-                System.out.println("Roll No already exists. Please enter a unique Roll No.");
+                System.out.println("Roll No already exists. Use a different number.");
                 return;
             }
 
-            // Proceed to insert
             PreparedStatement pst = conn.prepareStatement(
                 "INSERT INTO student1 (roll_no, name, age, branch) VALUES (?, ?, ?, ?)");
             pst.setInt(1, rollNo);
@@ -80,10 +78,7 @@ public class StudentData {
             pst.setInt(2, age);
             pst.setInt(3, rollNo);
             int rows = pst.executeUpdate();
-            if (rows > 0)
-                System.out.println("Student updated.");
-            else
-                System.out.println("Roll No not found.");
+            System.out.println(rows > 0 ? "Student updated." : "Roll No not found.");
         } catch (Exception e) {
             System.out.println("Update failed: " + e.getMessage());
         }
@@ -94,10 +89,7 @@ public class StudentData {
             PreparedStatement pst = conn.prepareStatement("DELETE FROM student1 WHERE roll_no=?");
             pst.setInt(1, rollNo);
             int rows = pst.executeUpdate();
-            if (rows > 0)
-                System.out.println("Student deleted.");
-            else
-                System.out.println("Roll No not found.");
+            System.out.println(rows > 0 ? "Student deleted." : "Roll No not found.");
         } catch (Exception e) {
             System.out.println("Delete failed: " + e.getMessage());
         }
@@ -106,19 +98,14 @@ public class StudentData {
     public void calculateGPA(int rollNo, int[] marks) {
         try {
             int total = 0;
-            for (int mark : marks)
-                total += mark;
+            for (int mark : marks) total += mark;
             float gpa = (float) total / marks.length;
 
             PreparedStatement pst = conn.prepareStatement("UPDATE student1 SET gpa=? WHERE roll_no=?");
             pst.setFloat(1, gpa);
             pst.setInt(2, rollNo);
             int rows = pst.executeUpdate();
-            if (rows > 0) {
-                System.out.println("GPA calculated and updated: " + gpa);
-            } else {
-                System.out.println("Student not found.");
-            }
+            System.out.println(rows > 0 ? "GPA updated: " + gpa : "Student not found.");
         } catch (Exception e) {
             System.out.println("GPA update failed: " + e.getMessage());
         }
@@ -139,11 +126,12 @@ public class StudentData {
                 float avgGpa = rs.getFloat("avg_gpa");
                 System.out.printf("Average GPA for %s: %.2f%n", branch, avgGpa);
             } else {
-                System.out.println("No students found in the specified branch.");
+                System.out.println("No students found for that branch.");
             }
         } catch (Exception e) {
-            System.out.println("Average GPA calculation failed: " + e.getMessage());
+            System.out.println("Avg GPA failed: " + e.getMessage());
         }
     }
 }
+
 

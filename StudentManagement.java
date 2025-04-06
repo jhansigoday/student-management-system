@@ -12,7 +12,8 @@ public class StudentManagement {
             System.out.println("3. Update Student");
             System.out.println("4. Delete Student");
             System.out.println("5. Calculate GPA");
-            System.out.println("6. Exit");
+            System.out.println("6. Average GPA by Branch");
+            System.out.println("7. Exit");
             System.out.print("Enter your choice: ");
             int choice = sc.nextInt();
 
@@ -20,16 +21,21 @@ public class StudentManagement {
                 case 1:
                     System.out.print("Enter Roll No: ");
                     int rollNo = sc.nextInt();
-                    sc.nextLine();
+                    sc.nextLine(); // Clear buffer
                     System.out.print("Enter Name: ");
                     String name = sc.nextLine();
                     System.out.print("Enter Age: ");
                     int age = sc.nextInt();
-                    sd.addStudent(rollNo, name, age);
+                    sc.nextLine(); // Clear buffer
+                    System.out.print("Enter Branch: ");
+                    String branch = sc.nextLine();
+                    sd.addStudent(rollNo, name, age, branch);
                     break;
+
                 case 2:
                     sd.viewAllStudents();
                     break;
+
                 case 3:
                     System.out.print("Enter Roll No to update: ");
                     rollNo = sc.nextInt();
@@ -40,11 +46,13 @@ public class StudentManagement {
                     age = sc.nextInt();
                     sd.updateStudent(rollNo, name, age);
                     break;
+
                 case 4:
                     System.out.print("Enter Roll No to delete: ");
                     rollNo = sc.nextInt();
                     sd.deleteStudent(rollNo);
                     break;
+
                 case 5:
                     System.out.print("Enter Roll No to calculate GPA: ");
                     rollNo = sc.nextInt();
@@ -57,12 +65,19 @@ public class StudentManagement {
                     }
                     sd.calculateGPA(rollNo, marks);
                     break;
+
                 case 6:
-                    System.out.println("Exiting...");
+                    sd.averageGPAByBranch();
+                    break;
+
+                case 7:
+                    System.out.println("Exiting Student Management System. Goodbye!");
                     return;
+
                 default:
-                    System.out.println("Invalid choice.");
+                    System.out.println("[ERROR] Invalid choice. Please enter a number between 1 and 7.");
             }
         }
     }
 }
+
